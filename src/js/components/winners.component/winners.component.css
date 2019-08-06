@@ -1,0 +1,9 @@
+.winner-picture {
+    object-fit:scale-down;
+    height:20vh;
+    margin-top: 5px;
+}
+
+.row {
+    margin: 0;
+}
