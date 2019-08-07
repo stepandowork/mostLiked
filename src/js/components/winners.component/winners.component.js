@@ -13,7 +13,9 @@ export default class WinnersComponent {
      * @description gets winners
      */
     async beforeRender() {
-        this.winners = await this.winnersService.getWinners({part: this.iterator, limit: 15}).then(response=>response.winners);        
+        this.showSpinner();
+        this.winners = await this.winnersService.getWinners({part: this.iterator, limit: 15}).then(response=>response.winners);    
+        this.hideSpinner();    
     }
 
     /**
@@ -82,6 +84,31 @@ export default class WinnersComponent {
         winnersContainer.appendChild(this.createWinnersFragment());
     }
 
+    showSpinner() {
+        let winnersContainer = document.getElementById("winners-container");
+        let checkSpinner = document.querySelector("#spinner");
+        if (checkSpinner) return;
+        let spinner = `
+        <div class="d-flex justify-content-center mt-5 mb-5" id="spinner">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        `;
+        if(winnersContainer){
+            winnersContainer.insertAdjacentHTML("beforeend", spinner);
+        } else {
+            document.body.insertAdjacentHTML("beforeend", spinner);
+        }
+        
+    }
+
+    hideSpinner() {
+        debugger;
+        let spinner = document.querySelector("#spinner");
+        spinner.parentNode.removeChild(spinner);
+    }
+
     /**
      * @description creates winner container
      * @returns {string} string with html div
@@ -103,7 +130,9 @@ export default class WinnersComponent {
             let scrolled = window.scrollY;           
             if(Math.ceil(scrolled) === scrollable){ 
                 this.iterator++;
-                this.beforeRender().then(()=> this.insertWinnerCards());           
+                this.showSpinner();
+                this.beforeRender()                
+                .then(()=> this.insertWinnerCards());
             }
         })
     }

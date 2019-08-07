@@ -17,7 +17,7 @@ export default class UserComponent {
   }
 
   async beforeRender() {
-    this._user = await this.userService.getUser(this.activeUserId);
+    this._user = await this.userService.getUser(this.activeUserId).catch(()=>location.reload());
     this._userImages = await this.userService.getUserImages(this.activeUserId);
     this.imagesTemplate = this._userImages.images.map(image=> this.singleImageTemplate(image));
   }
@@ -25,7 +25,6 @@ export default class UserComponent {
 
 
   render() {
-    console.log(this._userImages);
     return `
       <user-component>
         <div class="user-avatar-container d-flex justify-content-center">
